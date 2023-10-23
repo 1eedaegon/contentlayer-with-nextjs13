@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Post, allPosts } from "contentlayer/generated";
-import { format } from "path";
-import { compareDesc, parseISO } from "date-fns";
+import { compareDesc, parseISO, format } from "date-fns";
+import { useMDXComponent } from "next-contentlayer/hooks";
 
 function PostCard(post: Post) {
+  const MDXContent = useMDXComponent(post.body.code);
+
   return (
     <div className="mb-8">
       <h2 className="mb-1 text-xl">
@@ -15,12 +17,9 @@ function PostCard(post: Post) {
         </Link>
       </h2>
       <time dateTime={post.date} className="mb-2 block text-xs text-gray-600">
-        {format(parseISO(post.date), "LLLL d, YYYY")}
+        {format(parseISO(post.date), "LLLL d, yyyy")}
       </time>
-      <div
-        className="text-sm [&>*]:mb-3 [&>*:last-child]:mb-0"
-        dangerouslySetInnerHTML={{ __html: post.body.html }}
-      />
+      <MDXContent />
     </div>
   );
 }
